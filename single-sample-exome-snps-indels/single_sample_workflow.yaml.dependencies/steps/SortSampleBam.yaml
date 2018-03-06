@@ -1,0 +1,40 @@
+name: SortSampleBam
+
+inputs:
+- type: file
+  channel: markdup_bam
+  group: 1
+- type: string
+  channel: sample_id
+  group: 1
+- type: integer
+  channel: compression_level
+  group: 0
+   
+outputs:
+- type: file
+  channel: sorted_output_bam
+  filename: "{{sample_id}}.aligned.duplicate_marked.sorted.bam"
+- type: file
+  channel: sorted_output_bam_bai
+  filename: "{{sample_id}}.aligned.duplicate_marked.sorted.bam.bai"  
+- type: file
+  channel: sorted_output_bam_md5
+  filename: "{{sample_id}}.aligned.duplicate_marked.sorted.bam.md5"  
+  
+resources:
+  memory: 5
+  cores: 1
+  
+environment:
+  docker_image: broadinstitute/genomes-in-the-cloud:2.3.1-1504795437
+  
+command: >-
+java -Dsamjdk.compression_level=${{compression_level}} -Xms4000m -jar /usr/gitc/picard.jar \
+      SortSam \
+      INPUT=${{markdup_bam}} \
+      OUTPUT=${{sorted_output_bam}} \
+      SORT_ORDER="coordinate" \
+      CREATE_INDEX=true \
+      CREATE_MD5_FILE=true \
+      MAX_RECORDS_IN_RAM=300000
