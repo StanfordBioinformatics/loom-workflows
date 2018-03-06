@@ -1,0 +1,59 @@
+name: BaseRecalibrator
+
+inputs:
+- type: file
+  channel: sorted_output_bam
+  group: 1
+- type: string
+  channel: sample_id
+  group: 1
+- type: file
+  channel: sequence_group_interval
+  group: 2  
+- type: file
+  channel: ref_fasta
+  group: 0
+- type: file
+  channel: ref_fasta_index
+  group: 0
+- type: file
+  channel: ref_dict
+  group: 0
+- type: file
+  channel: dbsnp_for_comparison
+  group: 0
+- type: file
+  channel: dbsnp_for_comparison_tbi    
+  group: 0 
+- type: file 
+  channel: Mills_And_1000G_gold_standard_indels_vcf #known indel sites vcf
+  group: 0
+- type: file 
+  channel: Mills_And_1000G_gold_standard_indels_vcf_idx #known indel sites indices
+  group: 0 
+         
+outputs:
+- type: file
+  channel: recalibration_report
+  source:
+    filename: "{{sampleid}}_recalibration_report.grp"
+
+resources:
+  memory: 6
+  cores: 1
+  
+environment:
+  docker_image: broadinstitute/genomes-in-the-cloud:2.3.1-1504795437
+  
+command: >-
+/usr/gitc/gatk4/gatk-launch --javaOptions "-XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -XX:+PrintFlagsFinal \
+-XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintGCDetails \
+-Xloggc:gc_log.log -Xms4000m" \
+BaseRecalibrator \
+-R ${{ref_fasta}} \
+-I ${{sorted_output_bam}} \
+--useOriginalQualities \
+-O ${{recalibration_report}} \
+-knownSites {{dbsnp_for_comparison}} \
+-knownSites {{Mills_And_1000G_gold_standard_indels_vcf}} \
+-L {{sequence_group_interval}}
