@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:40:48.029086Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/c9d9dd56-814e-4905-aa76-88f3263afbbf/
+uuid: c9d9dd56-814e-4905-aa76-88f3263afbbf
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/wgs_calling_regions.hg38.interval_list
+  filename: wgs_calling_regions.hg38.interval_list
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/wgs_calling_regions.hg38.interval_list
+  md5: 1790be6605825971526fff7cb3232764
+  source_type: imported

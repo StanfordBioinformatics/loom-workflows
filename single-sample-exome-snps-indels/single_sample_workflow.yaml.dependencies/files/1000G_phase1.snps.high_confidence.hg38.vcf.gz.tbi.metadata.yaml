@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:31:51.541032Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/cc958c38-8045-4fd2-a2fa-1c6dd0feb133/
+uuid: cc958c38-8045-4fd2-a2fa-1c6dd0feb133
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/1000G_phase1.snps.high_confidence.hg38.vcf.gz.tbi
+  filename: 1000G_phase1.snps.high_confidence.hg38.vcf.gz.tbi
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/1000G_phase1.snps.high_confidence.hg38.vcf.gz.tbi
+  md5: 1610d5349edae9df29bd0ce62fdea8ce
+  source_type: imported

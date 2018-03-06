@@ -1,0 +1,354 @@
+#####Author: Vandhana Krishnan <vankrish@stanford.edu> ######
+# Workflow: Proposed single sample CGS workflow
+#
+# Reference: b37
+#EXAMPLE: loom run start single_sample_workflow_Benchmark@<your loomID> sampleid="NA24385" gender="m" \
+#                  fastq1=SCGV1-04_reads1.fastq.gz@<your loomID> 
+#                  fastq2=SCGV1-04_reads2.fastq.gz@<your loomID> 
+#                  outputFile_commonPrefix="happyResults_PersonalisNA24385vsNISTv3.3" \
+#                  truthCodingExonsVCF=HG002_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-22_v3.3_highconf_Overlapping_refseqCodingExonsmerged_chrRemoved_intersected_highconfbed.vcf.gz@<your loomID> \
+#                  truthCodingExonsBED=AJTriov3.3highconf_HG002son_Overlapping_refseqCodingExonsmerged_chrRemoved.bed@<your loomID> \
+#                  truthAllACEregionsVCF=HG002_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-22_v3.3_highconf_Overlapping_allACEregionssmerged_chrRemoved_intersected_highconfbed.vcf.gz@<your loomID> \
+#                  truthAllACEregionsBED=AJTriov3.3highconf_HG002son_Overlapping_allACEregionsmerged_chrRemoved.bed@<your loomID> \
+#                  Rscript_indelSize=indelSizeDistribution_Detailed.R@<your loomID>
+
+name: single_sample_workflow
+inputs:
+- type: file
+  channel: input_bam
+- type: string
+  channel: sample_id
+
+# Fixed inputs (may be overwritten)
+- type: float
+  channel: disk_size
+  group: 0
+  data:
+    contents: 30
+- type: integer
+  channel: compression_level
+  group: 0
+  data:
+    contents: 2
+- type: file
+  channel: ref_fasta
+  data:
+    contents: Homo_sapiens_assembly38.fasta
+- type: file
+  channel: ref_fasta_index
+  data:
+    contents: Homo_sapiens_assembly38.fasta.fai
+- type: file
+  channel: ref_dict
+  data:
+    contents: Homo_sapiens_assembly38.dict
+- type: file
+  channel: ref_amb
+  data: 
+    contents: Homo_sapiens_assembly38.fasta.64.amb
+- type: file
+  channel: ref_ann
+  data: 
+    contents: Homo_sapiens_assembly38.fasta.64.ann
+- type: file 
+  channel: ref_bwt
+  data: 
+    contents: Homo_sapiens_assembly38.fasta.64.bwt
+- type: file
+  channel: ref_pac
+  data: 
+    contents: Homo_sapiens_assembly38.fasta.64.pac
+- type: file
+  channel: ref_sa
+  data: 
+    contents: Homo_sapiens_assembly38.fasta.64.sa
+# known snps from 9 giab samples and 1 ref sample for building VQSR
+#- type: file
+#  channel: na12878_allchr_nonref_snp_annot_vcf #NA12878_ref_vqsr_input.vcf
+#  data:
+#    contents: $5aa1b20046b67a29a2c1f9e254f9ba57
+#- type: file
+#  channel: na12892_allchr_nonref_snp_annot_vcf #NA12892_ref_vqsr_input.vcf
+#  data:
+#    contents: $ead520f750c744134ff67e395b7c89db
+#- type: file
+#  channel: na12891_allchr_nonref_snp_annot_vcf #NA12891_ref_vqsr_input.vcf
+#  data:
+#    contents: $3afdd3ab5e6f8c89bb903bce4b6fc27a
+#- type: file
+#  channel: na24385_allchr_nonref_snp_annot_vcf #NA24385_ref_vqsr_input.vcf
+#  data:
+#    contents: $7d42758cfa06614e0e252a75bfbf35be
+#- type: file
+#  channel: na24143_allchr_nonref_snp_annot_vcf #NA24143_ref_vqsr_input.vcf
+#  data:
+#    contents: $16a5bc911c0cc0d0ed93ccf59c211541
+#- type: file
+#  channel: na24149_allchr_nonref_snp_annot_vcf #NA24149_ref_vqsr_input.vcf
+#  data:
+#    contents: $318064eae1f789d0b657da3817993662
+#- type: file
+#  channel: na24631_allchr_nonref_snp_annot_vcf #NA24631_ref_vqsr_input.vcf
+#  data:
+#    contents: $9f7a0cad21fd79f45acd1e25181b994e
+#- type: file
+#  channel: na24695_allchr_nonref_snp_annot_vcf #NA24695_ref_vqsr_input.vcf
+#  data:
+#    contents: $abac29af07eaec8036b309867feaec3b
+#- type: file
+#  channel: na24694_allchr_nonref_snp_annot_vcf #NA24694_ref_vqsr_input.vcf
+#  data:
+#    contents: $eae1524cf4db7360e924df50095ebac7
+#- type: file
+#  channel: na19240_allchr_nonref_snp_annot_vcf #NA19240_ref_vqsr_input.vcf
+#  data:
+#    contents: $490668a98f789d5be32434edce51af2a
+# known sites to mask out for Base Recalibration & VQSR   
+#- type: file
+#  channel: dbsnp_for_comparison #dbSNP.b150.GRCh37p13.All_20170710.vcf.gz
+#  data: 
+#    contents: $c0016259d7b6e1158fe74224aea7bdaa
+#- type: file
+#  channel: dbsnp_for_comparison_tbi #dbSNP.b150.GRCh37p13.All_20170710.vcf.gz.tbi
+#  data: 
+#    contents: $d7c3775a1b90b89208d2ad1d2422171c
+# Needed for VQSR Indels      
+#- type: file 
+#  channel: Mills_And_1000G_gold_standard_indels_vcf #Mills_and_1000G_gold_standard.indels.b37.vcf
+#  data:
+#    contents: $501259c9fcb195d6dd6ed111293a9d97
+#- type: file  
+#  channel: Mills_And_1000G_gold_standard_indels_vcf_idx #Mills_and_1000G_gold_standard.indels.b37.vcf.idx
+#  data:
+#    contents: $a1c742d832b4d765d2627d320df33045
+# 1000g SNPs needed for VQSR SNPs
+#- type: file
+#  channel: Phase1_1000g_SNPs_HighConfidence #1000G_phase1.snps.high_confidence.b37.vcf
+#  data: 
+#    contents: $d034f2fe30e69e3b582681e79bd57ba6
+#- type: file
+#  channel: Phase1_1000g_SNPs_HighConfidence_idx #1000G_phase1.snps.high_confidence.b37.vcf.idx
+#  data: 
+#    contents: $5520c751715d131c6b7fadddec3e2f77
+# Omni needed for VQSR SNPs
+#- type: file
+#  channel: omni_SNPs #1000G_omni2.5.b37.vcf
+#  data: 
+#    contents: $a610b201ceb28a6a44b37316821bbc9c
+#- type: file
+#  channel: omni_SNPs_idx #1000G_omni2.5.b37.vcf.idx
+#  data: 
+#    contents: $cd57f3cc19b3b5d180893b1709ed8b90
+# HapMap needed for VQSR SNPs
+#- type: file
+#  channel: hapmap_SNPs #hapmap_3.3.b37.vcf
+#  data: 
+#    contents: $2eb228194b6c1fd250869e3610eb04b6
+#- type: file
+#  channel: hapmap_SNPs_idx #hapmap_3.3.b37.vcf.idx
+#  data: 
+#    contents: $e605f91218a781447995d4e5f07045f4
+# Used for Depth of Coverage Calls
+#- type: file 
+#  channel: refseq_hg37_allexonsplus2_intervalslist #cgs_exome_ace3_plusminus20bp_allcontigs.interval_list
+#  data: 
+#    contents: $d607b06bbf99635923f6fbc5264d85df
+# Needed for ploidy specific Haplotype Caller   
+#- type: file
+#  channel: chrX_intervals_allexonsplus2_intervallist #cgs_exome_ace3_plusminus20bp_contigX.interval_list
+#  data: 
+#    contents: $8fe37bb004b0b14430eeb7c601ddde15
+#- type: file
+#  channel: chrY_intervals_allexonsplus2_intervallist #cgs_exome_ace3_plusminus20bp_contigY.interval_list
+#  data: 
+#    contents: $bb49e3bda4ef80107e196fa83b10c44a
+#- type: file
+#  channel: chrXY_intervals_allexonsplus2_intervallist #cgs_exome_ace3_plusminus20bp_contigXY.interval_list
+#  data:
+#    contents: $e1d4ce10adbe4cc43a445b171dda1c5e
+# Needed for Haplotype Caller
+#- type: file
+#  channel: autosomal_allexonsplus2_intervallist #cgs_exome_ace3_plusminus20bp_autosomalcontigs.interval_list
+#  data: 
+#    contents: $69e5e49cf84d0be70b7d0557c2d74d7e
+# Needed for fluidigm comparison
+#- type: file #Fluidigm_targets_06-16-2017_chrRemoved.bed
+#  channel: fluidigm_bed
+#  data:
+#    contents: $4979100a25ba6b1e463bc906178c6b68
+#- type: file  #Fluidigm_targets_06-16-2017_chrRemoved.vcf.gz
+#  channel: fluidigm_vcf
+#  data:
+#    contents: $8017633bfb6279a0f2ce39d93eba7f07
+#- type: file  #Fluidigm_targets_06-16-2017_chrRemoved.vcf.gz.tbi
+#  channel: fluidigm_vcf_tbi
+#  data:
+#    contents: $f62c109d8a93621d160df04de092b5ef
+#Needed for custom annotation
+#- type: file #chromlist.txt
+#  channel: chrom_list
+#  data:
+#    contents: $2b5132e719039e9bfb1befaa98e11b18
+#- type: file #clinvar_20170705.GRCh37.cgs.vcf.gz
+#  channel: clinvar_vcf
+#  data:
+#    contents: $814bb5d3645ca88b7b726128fccb063b
+#- type: file #clinvar_20170705.GRCh37.cgs.dots_removed.vcf.gz
+#  channel: clinvar_vcf
+#  data:
+#    contents: $1234a53af30f7e069206c5a2b2628f39
+#- type: file #clinvar_20170705.GRCh37.cgs.vcf.gz.tbi
+#  channel: clinvar_vcf_tbi
+#  data:
+#    contents: $662f9ef8c16a4403c5790fda4cb44351
+#- type: file #clinvar_20170705.GRCh37.cgs.dots_removed.vcf.gz.tbi
+#  channel: clinvar_vcf_tbi
+#  data:
+#    contents: $62dd2cc6e33fd2366665b91b5493e748
+#- type: file #InDels.exome.only.chrAdded.reorder.vcf.gz
+#  channel: cadd_indel_vcf
+#  data:
+#    contents: $64770919a3b1738bdcfd5c8d70ecf344
+#- type: file #cadd_v1.3_InDels.ace_plusmius20bp.exome.vcf.gz
+#  channel: cadd_indel_vcf
+#  data:
+#    contents: $33bf0d46554955e02fd20da3edca11fa
+#- type: file #InDels.exome.only.chrAdded.reorder.vcf.gz.tbi
+#  channel: cadd_indel_vcf_tbi
+#  data:
+#    contents: $a68e82e8a868d8d68223a6c5c3650e5c
+#- type: file #cadd_v1.3_InDels.ace_plusminus20bp.exome.vcf.gz.tbi
+#  channel: cadd_indel_vcf_tbi
+#  data:
+#    contents: $a1ddd444ec5fc0ce3f58b35002ca3687
+#- type: file #whole_genome_SNVs.exomes.only.chrAdded.reorder.vcf.gz
+#  channel: cadd_snp_vcf
+#  data:
+#    contents: $af605604dcabd4cbc34e11264da82489
+#- type: file #cadd_v1.3_whole_genome_SNVs.ace_plusminus20bp.exome.vcf.gz
+#  channel: cadd_snp_vcf
+#  data:
+#    contents: $40c988f92c589b09039de8977490e230
+#- type: file #whole_genome_SNVs.exomes.only.chrAdded.reorder.vcf.gz.tbi
+#  channel: cadd_snp_vcf_tbi
+#  data:
+#    contents: $81752664ccb0d97b50d1dff8323f0b8e
+#- type: file #cadd_v1.3_whole_genome_SNVs.ace_plusminus20bp.exome.vcf.gz.tbi
+#  channel: cadd_snp_vcf_tbi
+#  data:
+#    contents: $6f421dec387f133d27a3f29f4baab899
+#
+#- type: file #ExAC.r1.sites.vep.ace.exome.cgs.vcf.gz
+#  channel: exac_vep_vcf
+#  data:
+#    contents: $3d1fb75b688e03f5a2e380f2f1c85046
+#- type: file #gnomad.combined.r2.0.2.sites.ace_plusminus20bp.exome.vcf.gz
+#  channel: gnomad_vcf
+#  data:
+#    contents: $2bfd2e27fcc35ff9d78a90a968afe8e5
+#- type: file #ExAC.r1.sites.vep.ace.exome.cgs.vcf.gz.tbi
+#  channel: exac_vep_vcf_tbi
+#  data:
+#    contents: $afade394f81084482ad655ddeb6eb033
+#- type: file #gnomad.combined.r2.0.2.sites.ace_plusminus20bp.exome.vcf.gz.tbi
+#  channel: gnomad_vcf_tbi
+#  data:
+#    contents: $b4e14dbefd4c8b39f49f2a4f3a2bd4d5
+#- type: file #dbSNP.All_20161121.b149.GRCh37p13.allexonsplus2.chrAdded.reorder.vcf.gz
+#  channel: dbsnp_149_grch37p13_allexonsplus2_vcf
+#  data:
+#    contents: $c0b686a30e6ca8c77bca4aed9acf07c0
+#- type: file #dbSNP.b150.GRCh37p13.All_20170710.ace_plusminus20bp.exome.vcf.gz
+#  channel: dbsnp_vcf
+#  data:
+#    contents: $f580c9a7d770a99be9198cecfbe430f0
+#- type: file #dbSNP.All_20161121.b149.GRCh37p13.allexonsplus2.chrAdded.reorder.vcf.gz.tbi
+#  channel: dbsnp_149_grch37p13_allexonsplus2_vcf_tbi
+#  data:
+#    contents: $8f6c545b23988a62b9bee3787068e933
+#- type: file #dbSNP.b150.GRCh37p13.All_20170710.ace_plusminus20bp.exome.vcf.gz.tbi
+#  channel: dbsnp_vcf_tbi
+#  data:
+#    contents: $0188b42b594ab9d95f0c2e65b8b6bd42
+##QC parser - required threshold.json (threshold values will change after monitoring Jenkins runs)
+#- type: file #threshold.json
+#  channel: qc_threshold_json
+#  data:
+#    contents: $e8782ead01284945a5553b5ed1ca4190
+##For gene coverage
+#- type: file #ucsc_GRCh37hg19_refGenes_chrNo_exonsStartEnd_altGeneName_chrRemoved.bed
+#  channel: ucsc_refGenes_bed
+#  data:
+#    contents: $2e83df6fde7cc1465023c324508c7b23
+#- type: file #ucsc_GRCh37hg19_unique_refGenes_list.txt
+#  channel: ucsc_refGenes_list
+#  data:
+#    contents: $d524ddb89b3b4f26b9bd5e707cfcf440
+
+outputs:
+#  - type: file
+#    channel: recalibrated_bam
+#  - type: file
+#    channel: recalibrated_bam_bai
+#  - type: file
+#    channel: allchr_gvcf
+#  - type: file
+#    channel: allchr_gvcf_idx 
+#  - type: file
+#    channel: final_gvcf
+#  - type: file
+#    channel: samtools_flagstat_alignment_read_metrics
+#  - type: file
+#    channel: depthOfCoverageRefSeqExons_output_Q30_txt
+#  - type: file 
+#    channel: variantEval_Metrics
+#  - type: file
+#    channel: alignment_summary_metrics_output_txt
+#  - type: file  
+#    channel: gC_Bias_Metrics_summary_output_txt
+#  - type: file
+#    channel: gC_Bias_Metrics_detailed_output_txt
+#  - type: file
+#    channel: gC_Bias_Metrics_chart_output  
+#  - type: file  
+#    channel: insertSizeMetrics_output_txt
+#  - type: file
+#    channel: insertSizeMetrics_histogram_output
+#  - type: file
+#    channel: meanQualityByCycle_output_txt
+#  - type: file
+#    channel: meanQualityByCycle_chart_output 
+#  - type: file  
+#    channel: qualityScoreDistribution_output_txt
+#  - type: file
+#    channel: qualityScoreDistrbution_chart_output  
+#  - type: file
+#    channel: fastqc_raw_read_metrics_html  
+#  - type: file
+#    channel: fastqc_zipfile
+#  - type: file
+#    channel: genecoverage_output_txt
+#  - type: file
+#    channel: all_qc_summary_output_json  
+#  - type: file #add only if needing assay results for sample fingerprinting
+#    channel: fluidigm_targets_vcf
+
+steps:
+- SamToFastqAndBwaMemAndMba
+#- sort_by_queryname
+#- mark_duplicates
+#- sort_by_coordinates
+#- base_recalibration
+#- call_single_sample
+#- split_ref_and_nonref
+#- variant_annotator
+#- split_snps_and_indels
+#- vqsr_snps
+#- filter_snps
+#- filter_indels
+#- merge_snps_and_indels
+#- custom_annotation
+#- merge_ref_and_nonref
+#- metrics
+#- fluidigm_comparison
+#- qc_summary_parser

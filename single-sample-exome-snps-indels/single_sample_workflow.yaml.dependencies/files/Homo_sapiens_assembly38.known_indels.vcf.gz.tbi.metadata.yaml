@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:45:22.923987Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/dc4fe621-59be-4066-864b-20001c0f6525/
+uuid: dc4fe621-59be-4066-864b-20001c0f6525
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi
+  filename: Homo_sapiens_assembly38.known_indels.vcf.gz.tbi
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.known_indels.vcf.gz.tbi
+  md5: 1a55fdfa6533ae5cbc70e8188e779229
+  source_type: imported

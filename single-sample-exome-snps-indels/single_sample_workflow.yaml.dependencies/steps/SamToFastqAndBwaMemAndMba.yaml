@@ -1,0 +1,115 @@
+#####Author: Vandhana Krishnan <vankrish@stanford.edu> ######
+# Could get multiple FastQs ; Presently assuming 1 RG. Hence 1 BAM; No Merging
+
+#command: /usr/gitc/bwa mem -v 3 -t 31 -M -R "@RG\tID:0\tLB:Library\tPL:Illumina\tSM:"{{sampleid}} {{reference}} {{fastq1}} {{fastq2}} | /usr/local/bin/samtools view -b -S -h - -o {{alignedreads_bam}}
+
+name: SamToFastqAndBwaMemAndMba
+
+inputs:
+- type: file
+  channel: input_bam
+  group: 1
+- type: string
+  channel: sample_id
+  group: 1
+- type: file
+  channel: ref_fasta
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta
+- type: file
+  channel: ref_fasta_index
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta.fai
+- type: file
+  channel: ref_dict
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.dict
+- type: file
+  channel: ref_alt
+  data:
+    contents: Homo_sapiens_assembly38.fasta.64.alt
+- type: file
+  channel: ref_amb
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta.64.amb
+- type: file
+  channel: ref_ann 
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta.64.ann
+- type: file
+  channel: ref_bwt
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta.64.bwt
+- type: file
+  channel: ref_pac
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta.64.pac
+- type: file
+  channel: ref_sa
+  group: 0
+  data:
+    contents: Homo_sapiens_assembly38.fasta.64.sa
+- type: integer
+  channel: compression_level
+  group: 0
+
+outputs:
+- type: file
+  channel: output_bam
+  filename: "{{sample_id}}.aligned.bam"
+
+resources:
+  memory: 14
+  cores: 16
+
+environment:
+  docker_image: broadinstitute/genomes-in-the-cloud:2.3.1-1504795437
+
+command: >-
+  BWA_VERSION=`/usr/gitc/bwa 2>&1 | grep -e '^Version' | sed 's/Version: //'`;
+  BWA_COMMANDLINE='bwa mem -K 100000000 -p -v 3 -t 16 -Y "{{ref_fasta}}"';
+  java -Xms5000m -jar /usr/gitc/picard.jar \
+    SamToFastq \
+    INPUT={{input_bam}} \
+    FASTQ=/dev/stdout \
+    INTERLEAVE=true \
+    NON_PF=true | \
+  /usr/gitc/${BWA_COMMANDLINE} /dev/stdin - 2> >(tee ${output_bam_basename}.bwa.stderr.log >&2) | \
+  java -Dsamjdk.compression_level=${compression_level} -Xms3000m -jar /usr/gitc/picard.jar \
+  MergeBamAlignment \
+  VALIDATION_STRINGENCY=SILENT \
+  EXPECTED_ORIENTATIONS=FR \
+  ATTRIBUTES_TO_RETAIN=X0 \
+  ATTRIBUTES_TO_REMOVE=NM \
+  ATTRIBUTES_TO_REMOVE=MD \
+  ALIGNED_BAM=/dev/stdin \
+  UNMAPPED_BAM={{input_bam}} \
+  OUTPUT=${output_bam_basename}.bam \
+  REFERENCE_SEQUENCE={{ref_fasta}} \
+  PAIRED_RUN=true \
+  SORT_ORDER="unsorted" \
+  IS_BISULFITE_SEQUENCE=false \
+  ALIGNED_READS_ONLY=false \
+  CLIP_ADAPTERS=false \
+  MAX_RECORDS_IN_RAM=2000000 \
+  ADD_MATE_CIGAR=true \
+  MAX_INSERTIONS_OR_DELETIONS=-1 \
+  PRIMARY_ALIGNMENT_STRATEGY=MostDistant \
+  PROGRAM_RECORD_ID="bwamem" \
+  PROGRAM_GROUP_VERSION="${BWA_VERSION}" \
+  PROGRAM_GROUP_COMMAND_LINE="${BWA_COMMANDLINE}" \
+  PROGRAM_GROUP_NAME="bwamem" \
+  UNMAPPED_READ_STRATEGY=COPY_TO_TAG \
+  ALIGNER_PROPER_PAIR_FLAGS=true \
+  UNMAP_CONTAMINANT_READS=true \
+  ADD_PG_TAG_TO_READS=false
+
+#  grep -m1 "read .* ALT contigs" ${output_bam_basename}.bwa.stderr.log | \
+#  grep -v "read 0 ALT contigs"

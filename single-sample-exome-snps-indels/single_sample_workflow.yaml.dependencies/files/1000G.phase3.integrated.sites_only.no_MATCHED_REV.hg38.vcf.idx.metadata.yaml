@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:31:40.420991Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/c40bd004-b0d4-4139-b7fe-a6a45cd6525e/
+uuid: c40bd004-b0d4-4139-b7fe-a6a45cd6525e
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf.idx
+  filename: 1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf.idx
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/1000G.phase3.integrated.sites_only.no_MATCHED_REV.hg38.vcf.idx
+  md5: 50f1375c531c50ac00f5263753c83be4
+  source_type: imported

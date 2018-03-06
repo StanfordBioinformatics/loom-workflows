@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:29:36.670199Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/8cbb281a-197d-4531-a0b3-919561dea64a/
+uuid: 8cbb281a-197d-4531-a0b3-919561dea64a
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.fasta.64.ann
+  filename: Homo_sapiens_assembly38.fasta.64.ann
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.fasta.64.ann
+  md5: af611ed0bb9487fb1ba4aa1a7e7ad21c
+  source_type: imported

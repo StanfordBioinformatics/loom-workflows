@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:45:41.044809Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/52ff4e0f-8f10-4020-9b7d-075bd6fdb0fa/
+uuid: 52ff4e0f-8f10-4020-9b7d-075bd6fdb0fa
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.dict
+  filename: Homo_sapiens_assembly38.dict
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.dict
+  md5: 3884c62eb0e53fa92459ed9bff133ae6
+  source_type: imported

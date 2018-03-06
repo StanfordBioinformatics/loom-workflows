@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:45:15.977440Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/446f9067-1098-47f9-bc05-c8d2ee4aa28e/
+uuid: 446f9067-1098-47f9-bc05-c8d2ee4aa28e
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+  filename: Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+  md5: 2e02696032dcfe95ff0324f4a13508e3
+  source_type: imported

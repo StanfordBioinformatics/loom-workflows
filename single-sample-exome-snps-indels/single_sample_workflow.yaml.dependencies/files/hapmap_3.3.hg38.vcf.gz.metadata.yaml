@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:45:02.606118Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/a9ab1e96-aa2e-404a-a689-ea2a5c0f645c/
+uuid: a9ab1e96-aa2e-404a-a689-ea2a5c0f645c
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/hapmap_3.3.hg38.vcf.gz
+  filename: hapmap_3.3.hg38.vcf.gz
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/hapmap_3.3.hg38.vcf.gz
+  md5: d05ac6b9a247a21ce0030c7494194da9
+  source_type: imported

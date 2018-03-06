@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:31:54.347489Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/d13885ac-8ee6-434d-9038-99df14e7a6be/
+uuid: d13885ac-8ee6-434d-9038-99df14e7a6be
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz
+  filename: Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/Axiom_Exome_Plus.genotypes.all_populations.poly.hg38.vcf.gz
+  md5: caf24e75a9ab3d70ab5474e19ad30ddc
+  source_type: imported

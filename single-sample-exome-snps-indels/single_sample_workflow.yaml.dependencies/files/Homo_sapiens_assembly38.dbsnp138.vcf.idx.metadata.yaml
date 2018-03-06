@@ -1,0 +1,11 @@
+datetime_created: '2018-02-28T19:16:47.369971Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/c2ff7394-0346-4ab9-b8e4-fea57804c67d/
+uuid: c2ff7394-0346-4ab9-b8e4-fea57804c67d
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf.idx
+  filename: Homo_sapiens_assembly38.dbsnp138.vcf.idx
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.dbsnp138.vcf.idx
+  md5: 2ba2e25b675c3a00ca663543b98170d8
+  source_type: imported

@@ -1,0 +1,11 @@
+datetime_created: '2018-02-28T19:21:33.812437Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/7499e664-d893-428f-944b-095979000768/
+uuid: 7499e664-d893-428f-944b-095979000768
+value:
+  file_url: gs://cgsdevelopment-1216-loom/nh-loom/imported/2018-02-28T19.21.33Z_7499e664_Homo_sapiens_assembly38.dbsnp138.vcf
+  filename: Homo_sapiens_assembly38.dbsnp138.vcf
+  import_comments: ''
+  imported_from_url: file:///Users/s0198839/dev/loom-workflows/single-sample-exome-snps-indels/Homo_sapiens_assembly38.dbsnp138.vcf
+  md5: f7e1ef5c1830bfb33675b9c7cbaa4868
+  source_type: imported

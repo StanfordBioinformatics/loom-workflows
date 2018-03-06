@@ -1,0 +1,11 @@
+datetime_created: '2018-02-27T23:31:43.083569Z'
+type: file
+url: https://10.249.17.12:443/api/data-objects/c3cd6abe-4348-4ac8-9062-23b5fc3fa471/
+uuid: c3cd6abe-4348-4ac8-9062-23b5fc3fa471
+value:
+  file_url: gs://genomics-public-data/resources/broad/hg38/v0/1000G_omni2.5.hg38.vcf.gz
+  filename: 1000G_omni2.5.hg38.vcf.gz
+  import_comments: ''
+  imported_from_url: gs://genomics-public-data/resources/broad/hg38/v0/1000G_omni2.5.hg38.vcf.gz
+  md5: 345b811a791f6704996b8bca4c8a16d9
+  source_type: imported
