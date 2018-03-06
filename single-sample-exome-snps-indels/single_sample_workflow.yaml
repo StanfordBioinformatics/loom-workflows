@@ -103,24 +103,27 @@ inputs:
 #  channel: na19240_allchr_nonref_snp_annot_vcf #NA19240_ref_vqsr_input.vcf
 #  data:
 #    contents: $490668a98f789d5be32434edce51af2a
-# known sites to mask out for Base Recalibration & VQSR   
-#- type: file
-#  channel: dbsnp_for_comparison #dbSNP.b150.GRCh37p13.All_20170710.vcf.gz
-#  data: 
-#    contents: $c0016259d7b6e1158fe74224aea7bdaa
-#- type: file
-#  channel: dbsnp_for_comparison_tbi #dbSNP.b150.GRCh37p13.All_20170710.vcf.gz.tbi
-#  data: 
-#    contents: $d7c3775a1b90b89208d2ad1d2422171c
-# Needed for VQSR Indels      
-#- type: file 
-#  channel: Mills_And_1000G_gold_standard_indels_vcf #Mills_and_1000G_gold_standard.indels.b37.vcf
-#  data:
-#    contents: $501259c9fcb195d6dd6ed111293a9d97
-#- type: file  
-#  channel: Mills_And_1000G_gold_standard_indels_vcf_idx #Mills_and_1000G_gold_standard.indels.b37.vcf.idx
-#  data:
-#    contents: $a1c742d832b4d765d2627d320df33045
+
+# Known sites to mask out for Base Recalibration & VQSR   
+- type: file
+  channel: dbsnp_for_comparison #dbSNP.b150.GRCh37p13.All_20170710.vcf.gz
+  data: 
+    contents: $c0016259d7b6e1158fe74224aea7bdaa
+- type: file
+  channel: dbsnp_for_comparison_tbi #dbSNP.b150.GRCh37p13.All_20170710.vcf.gz.tbi
+  data: 
+    contents: $d7c3775a1b90b89208d2ad1d2422171c
+
+# Needed for BQSR + VQSR Indels      
+- type: file 
+  channel: Mills_And_1000G_gold_standard_indels_vcf #Mills_and_1000G_gold_standard.indels.b37.vcf
+  data:
+    contents: $501259c9fcb195d6dd6ed111293a9d97
+- type: file  
+  channel: Mills_And_1000G_gold_standard_indels_vcf_idx #Mills_and_1000G_gold_standard.indels.b37.vcf.idx
+  data:
+    contents: $a1c742d832b4d765d2627d320df33045
+
 # 1000g SNPs needed for VQSR SNPs
 #- type: file
 #  channel: Phase1_1000g_SNPs_HighConfidence #1000G_phase1.snps.high_confidence.b37.vcf
